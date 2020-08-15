@@ -1,5 +1,5 @@
 plugin-name cordova-plugin-hms-map
-plugin-path HUAWEI/GITLAB-REPOSITORIES/HP_HMSCore_HMSCore-Plugin-Cordova_Map-Library
+plugin-path cordova-plugin-hms-map
 plugin-last-name hms-map
 app-name MapIonicDemo
 app-id com.bilginyuksel.mapionicdemo

@@ -10,7 +10,7 @@ std::string get_stdout_from_cli(std::string cmd){
 
 	std::string data;
 	FILE* stream;
-	const int max_buffer = 512;
+	const int max_buffer = 256;
 	char buffer[max_buffer];
 	cmd.append(" 2>&1");
 
@@ -23,10 +23,10 @@ std::string get_stdout_from_cli(std::string cmd){
 
 	return data;
 }
-	
+
 void gradleWriter(const std::unordered_map<std::string, std::string>& inner,
 		const std::unordered_map<std::string, std::string>& outer){
-	
+
 	std::ifstream outer_gradle("android/build.gradle");
 	if(!outer_gradle.is_open()){
 		std::cout<<"Project level gradle file couldn't find under android folder.\n";
@@ -39,7 +39,7 @@ void gradleWriter(const std::unordered_map<std::string, std::string>& inner,
 		str += c;
 	}
 	outer_gradle.close();
-	
+
 	std::size_t found = str.find("repositories"); 
 	if(found != std::string::npos){
 		// put maven.
@@ -51,7 +51,7 @@ void gradleWriter(const std::unordered_map<std::string, std::string>& inner,
 		// put maven.
 		for(std::size_t it= found; it<str.length(); ++it)
 			if(str[it] == '}') {str.insert(it-1, outer.at("maven")+"\n");break;}
-		
+
 	}
 
 	found = str.find("dependencies");
@@ -70,14 +70,14 @@ void gradleWriter(const std::unordered_map<std::string, std::string>& inner,
 	/// /////////////////////////////
 
 	std::ifstream inner_gradle("android/app/build.gradle");
-	
+
 	str = "";
 	while(inner_gradle >> std::noskipws >> c)
 		str += c;
 
 	found = str.find("release");
-	std::string put_signing_configs = "\nsigningConfig signingConfigs.release\nminifyEnabled false\n";
-	std::string put_debug = "debug{\nsigningConfig signingConfigs.release\ndebuggable true\n}\n";
+	std::string put_signing_configs = "\nsigningConfig signingConfigs.release\n";
+	std::string put_debug = "\ndebug{\nsigningConfig signingConfigs.release\ndebuggable true\n}\n";
 	if(found != std::string::npos)
 		for(std::size_t it=found; it<str.length(); ++it)
 			if(str[it] == '{')str.insert(it+1, put_signing_configs);
@@ -121,37 +121,48 @@ void ionic_zero_to_hero(const std::unordered_map<std::string, std::string>& conf
 	 * > ionic cap run android
 	 *
 	 *
-	 * */
+ * */
 
 	std::string tillDesktop = "C:/Users/"+conf.at("user")+"/Desktop/";
 
 	std::vector<std::string> steps;
 	steps.push_back("npm install ");
-	steps.push_back("npm install "+tillDesktop+conf.at("plugin-path"));
+	steps.push_back("npm install ../"+conf.at("plugin-path"));
 	steps.push_back("npm install @ionic-native/core --save-dev");
 	steps.push_back("cp node_modules/@hmscore/"+conf.at("plugin-name")+"/ionic/dist/"+conf.at("plugin-last-name")+" node_modules/@ionic-native/ -r");
 	steps.push_back("ionic build");
 	steps.push_back("npx cap init " + conf.at("app-name")+ " " + conf.at("app-id"));
 	steps.push_back("ionic cap add android");
-	steps.push_back("cp "+tillDesktop+"agconnect-services.json android/app/ -r");
-	steps.push_back("cp "+tillDesktop+conf.at("jks")+ " android/app/ -r");
+	steps.push_back("cp ../agconnect-services.json android/app/ -r");
+	steps.push_back("cp ../"+conf.at("jks")+ " android/app/ -r");
 	steps.push_back("npx cap sync");
 	steps.push_back("ionic cap run android");
 
+	std::cout<<"Step 1\n\t"<<steps[0]<<"..... processing\n";
 	get_stdout_from_cli(steps[0]);
+	std::cout<<"Step 2\n\t"<<steps[1]<<"..... processing\n";
 	get_stdout_from_cli(steps[1]);
+	std::cout<<"Step 3\n\t"<<steps[2]<<"..... processing\n";
 	get_stdout_from_cli(steps[2]);
+	std::cout<<"Step 4\n\t"<<steps[3]<<"..... processing\n";
 	get_stdout_from_cli(steps[3]);
+	std::cout<<"Step 5\n\t"<<steps[4]<<"..... processing\n";
 	get_stdout_from_cli(steps[4]);
+	std::cout<<"Step 6\n\t"<<steps[5]<<"..... processing\n";
 	get_stdout_from_cli(steps[5]);
+	std::cout<<"Step 7\n\t"<<steps[6]<<"..... processing\n";
 	get_stdout_from_cli(steps[6]);
 		
 	// run gradler writer here......
 	gradleWriter(inner, outer);
 
+	std::cout<<"Step 8\n\t"<<steps[7]<<"..... processing\n";
 	get_stdout_from_cli(steps[7]);
+	std::cout<<"Step 9\n\t"<<steps[8]<<"..... processing\n";
 	get_stdout_from_cli(steps[8]);
+	std::cout<<"Step 10\n\t"<<steps[9]<<"..... processing\n";
 	get_stdout_from_cli(steps[9]);
+	std::cout<<"Step 11\n\t"<<steps[10]<<"..... processing\n";
 	get_stdout_from_cli(steps[10]);
 	
 	std::cout<<"Following steps listed below.\n";
